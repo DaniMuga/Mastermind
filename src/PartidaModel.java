@@ -46,7 +46,11 @@ public class PartidaModel {
     }
     //TOSTRNG-----------
     public String toString() {
-        String imp = "Aleatori: " + Arrays.toString(rand) + "\n\nENTRADA\tBEN_POS\tMAL_POS\tTAULA\n";
+        String imp = "Aleatori: " + Arrays.toString(rand) + "\n\nENTRADA\tBEN_POS\tMAL_POS\tTAULA\n"+l_tiradas;
         return imp;
+    }
+
+    public void add(Tirada tirada) {
+        l_tiradas.add(tirada);
     }
 }

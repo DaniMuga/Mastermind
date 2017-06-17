@@ -11,8 +11,8 @@ public class TiradaController {
     }
 
     public String nuevaTirada(int comb, boolean ayuda) {
-        TiradaModel modelo = new TiradaModel(rand, 5);
-        //partida.add(modelo.getTirada());
+        TiradaModel modelo = new TiradaModel(rand, 5, comb);
+        partida.add(new Tirada(modelo.getJugada(),modelo.getT_ayuda(),modelo.getBienMal()));
         return modelo.toString();
     }
 }

@@ -26,11 +26,11 @@ public class Partida {
         }
         return taula;
     }
-    public void hacerTirada(){
+    /*public void hacerTirada(){
         Tirada t = new Tirada(rand,max); //crea un objeto tirada al que se le pasan la tabla de randoms y el max de la tabla
         l_tiradas.add(t); //en la lista de tiradas, añade la tirada hecha
         if (t.getBien()==5) acabado=true; //si obtiene la tabla de bien con un 5, es decir, ha acertado la combinación, se da por terminada la partida.
-    }
+    }*/
     //GETTERS-----------
     public boolean getAcabado() {
         return acabado;

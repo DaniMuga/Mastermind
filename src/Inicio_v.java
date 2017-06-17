@@ -130,8 +130,9 @@ public class Inicio_v{
 				combinacion=combinacion+comboBox4.getSelectedItem();
 				combinacion=combinacion+comboBox5.getSelectedItem();
 				combo=Integer.parseInt(combinacion);
-				result.setText(new TiradaController(partida).nuevaTirada(combo,mb_ayuda.getState()));
-			}
+				result.setText(partida+"\r\n"+(new TiradaController(partida)).nuevaTirada(combo,mb_ayuda.getState()));
+                System.out.println(partida);
+            }
 		});
 		
 		panel2.add(result,new GridBagConstraints(1,0,1,1,0.0,0.0,GridBagConstraints.CENTER,GridBagConstraints.BOTH,new Insets(0,0,10,0),0,0));

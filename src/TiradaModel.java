@@ -11,19 +11,19 @@ public class TiradaModel {
     private int num_tirada = 0;
 
     //CONSTRUCTOR
-    public TiradaModel(byte[] rand, int max) {
+    public TiradaModel(byte[] rand, int max,int combo) {
         this.max = (byte) max; //guarda max en un atributo
-        jugada = crearTirada(); //hace una tirada y la guarda en una tabla
+        jugada = crearTirada(combo); //hace una tirada y la guarda en una tabla
         t_ayuda = comprobarTabla(jugada, rand); //comprueba los que están bien o mal puestos (0/1/2)
         bienMal = contarBienMal(t_ayuda); //cuenta los que están bien y mal
         num_tirada++; //contador de tiradas
     }
 
     //METODOS----------
-    public byte[] crearTirada() {
+    public byte[] crearTirada(int temp) {
         byte tirada[] = new byte[max];
 //		int temp=Integer.parseInt(System.console().readLine());
-        int temp = (new Scanner(System.in)).nextInt();
+//        int temp = (new Scanner(System.in)).nextInt();
         for (int i = max - 1; i >= 0; i--) { //recorrido inverso en el que añade los números
             tirada[i] = (byte) (temp % 10);
             temp = temp / 10;
