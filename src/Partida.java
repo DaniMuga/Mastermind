@@ -6,16 +6,17 @@ import java.util.Random;
 public class Partida {
     private final byte max;
     private byte[] rand;
-    private boolean acabado=false;
+    private boolean acabado = false;
     private List<Tirada> l_tiradas = new ArrayList<>();
 
     //CONSTRUCTOR----------
     public Partida(int max) {
-        this.max=(byte)max; //guarda el max en un atributo
+        this.max = (byte) max; //guarda el max en un atributo
         rand = crearObjetivo(max, 0, 9);  //Crea una tabla de randoms de 0 a 9 de 5(max) números
     }
+
     //MÉTODOS--------------
-    public byte[] crearObjetivo(int l_taula, int inici, int fi){ //Crea la tabla de randoms
+    public byte[] crearObjetivo(int l_taula, int inici, int fi) { //Crea la tabla de randoms
         byte taula[] = new byte[l_taula];  //Crea la tabla vacía
         Random rand = new Random();
         fi = fi - inici + 1;
@@ -26,6 +27,11 @@ public class Partida {
         }
         return taula;
     }
+
+    public void add(Tirada tirada) {
+        l_tiradas.add(tirada);
+    }
+
     /*public void hacerTirada(){
         Tirada t = new Tirada(rand,max); //crea un objeto tirada al que se le pasan la tabla de randoms y el max de la tabla
         l_tiradas.add(t); //en la lista de tiradas, añade la tirada hecha
@@ -35,9 +41,18 @@ public class Partida {
     public boolean getAcabado() {
         return acabado;
     } //devuelve si está acabado o no
+
+    public void setAcabado(boolean acabado) {
+        this.acabado = acabado;
+    }
+
+    public byte[] getRand() {
+        return rand;
+    }
+
     //TOSTRNG-----------
-    public String toString(){
-        String imp="Aleatori: "+ Arrays.toString(rand) +"\n\nENTRADA\tBEN_POS\tMAL_POS\tTAULA\n";
+    public String toString() {
+        String imp = "Aleatori: " + Arrays.toString(rand) + "\n\nENTRADA\tBEN_POS\tMAL_POS\tTAULA\n" + l_tiradas;
         return imp;
     }
 }

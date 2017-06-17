@@ -17,6 +17,7 @@ public class TiradaModel {
         t_ayuda = comprobarTabla(jugada, rand); //comprueba los que están bien o mal puestos (0/1/2)
         bienMal = contarBienMal(t_ayuda); //cuenta los que están bien y mal
         num_tirada++; //contador de tiradas
+
     }
 
     //METODOS----------

@@ -1,7 +1,10 @@
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
+import java.util.Vector;
+
 public class Inicio_v{
 	private JFrame frame=new JFrame("MasterMind");
 	private JPanel mainPanel=new JPanel();
@@ -16,7 +19,7 @@ public class Inicio_v{
 	
 	//-Panel2
 	private JTextField result =new JTextField("");
-	private String[] items ={"1","2","3","4","5","6","7","8","9"};
+	private String[] items ={"0","1","2","3","4","5","6","7","8","9"};
 	private	JComboBox<String> comboBox1 = new JComboBox<>( items );
 	private	JComboBox<String> comboBox2 = new JComboBox<>( items );
 	private	JComboBox<String> comboBox3 = new JComboBox<>( items );
@@ -39,7 +42,7 @@ public class Inicio_v{
 	private JMenuItem mb_guardarp= new JMenuItem("Guardar Partida");
 
 	//PARTIDA
-	private static PartidaModel partida;
+	private static Partida partida;
 	
 	public Inicio_v(){
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -102,15 +105,15 @@ public class Inicio_v{
 		//fin MENU
 		
 		comboBox1.setPreferredSize(new Dimension(55, 40));
-		comboBox1.setMaximumRowCount(9);
+		comboBox1.setMaximumRowCount(10);
 		comboBox2.setPreferredSize(new Dimension(55, 40));
-		comboBox2.setMaximumRowCount(9);
+		comboBox2.setMaximumRowCount(10);
 		comboBox3.setPreferredSize(new Dimension(55, 40));
-		comboBox3.setMaximumRowCount(9);
+		comboBox3.setMaximumRowCount(10);
 		comboBox4.setPreferredSize(new Dimension(55, 40));
-		comboBox4.setMaximumRowCount(9);
+		comboBox4.setMaximumRowCount(10);
 		comboBox5.setPreferredSize(new Dimension(55, 40));
-		comboBox5.setMaximumRowCount(9);
+		comboBox5.setMaximumRowCount(10);
 		//Panel ComboBoxes
 		JPanel panelCombo=new JPanel();
 		panelCombo.add(comboBox1); panelCombo.add(comboBox2); panelCombo.add(comboBox3); panelCombo.add(comboBox4); panelCombo.add(comboBox5);
@@ -119,9 +122,22 @@ public class Inicio_v{
 		result.setEditable(false);
 		result.setPreferredSize(new Dimension(500,400));
 
+		//TABLA
+		Vector<String> cabesa=new Vector<>();
+		cabesa.add("Tirada");cabesa.add("Bien");cabesa.add("Mal");cabesa.add("Ayuda");
+		Vector<Vector<String>> contenido=new Vector<>();
+		JTable tabla_tiradas = new JTable(new DefaultTableModel(contenido, cabesa));
+		tabla_tiradas.getTableHeader().setReorderingAllowed(false);
+		tabla_tiradas.getTableHeader().setResizingAllowed(false);
+		tabla_tiradas.getColumnModel().getColumn(0).setPreferredWidth(250);
+		tabla_tiradas.getColumnModel().getColumn(3).setPreferredWidth(250);
+		JScrollPane tabla_t= new JScrollPane(tabla_tiradas);
+
+
 		//ENVIAR TIRADA
 		enviar_comb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
 				int combo;
 				String combinacion="";
 				combinacion=combinacion+comboBox1.getSelectedItem();
@@ -130,12 +146,14 @@ public class Inicio_v{
 				combinacion=combinacion+comboBox4.getSelectedItem();
 				combinacion=combinacion+comboBox5.getSelectedItem();
 				combo=Integer.parseInt(combinacion);
-				result.setText(partida+"\r\n"+(new TiradaController(partida)).nuevaTirada(combo,mb_ayuda.getState()));
+				DefaultTableModel defaultTableModel=(DefaultTableModel)tabla_tiradas.getModel();
+				defaultTableModel.addRow((new TiradaController(partida)).nuevaTirada(combo,mb_ayuda.getState()));
+				if(partida.getAcabado()){enviar_comb.setEnabled(false);}
                 System.out.println(partida);
             }
 		});
-		
-		panel2.add(result,new GridBagConstraints(1,0,1,1,0.0,0.0,GridBagConstraints.CENTER,GridBagConstraints.BOTH,new Insets(0,0,10,0),0,0));
+
+		panel2.add(tabla_t,new GridBagConstraints(1,0,1,1,0.0,0.0,GridBagConstraints.CENTER,GridBagConstraints.BOTH,new Insets(0,0,10,0),0,0));
 		panel2.add(enviar_comb,new GridBagConstraints(1,2,1,1,0.0,0.0,GridBagConstraints.CENTER,GridBagConstraints.NONE,new Insets(0,0,10,0),0,0));
 		
 		
@@ -154,7 +172,6 @@ public class Inicio_v{
         };
         //create table with data
         JTable table = new JTable(data, columns);
-
         JScrollPane sc= new JScrollPane(table);
         JPanel botones_p3=new JPanel();
         botones_p3.add(b_cargar2);
@@ -180,10 +197,10 @@ public class Inicio_v{
 			JButton src=(JButton) e.getSource();
 			
 			if(src.equals(b_iniciar)){
+
 				PartidaController controlador=new PartidaController();
 				partida=controlador.nueva();
 				cardLayout.show(mainPanel,"panel2");
-
 			}
 			if(src.equals(b_cargar)){
 				cardLayout.show(mainPanel,"panel3");

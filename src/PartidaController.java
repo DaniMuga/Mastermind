@@ -3,8 +3,8 @@
  */
 public class PartidaController {
     //
-    public PartidaModel nueva() {
-        PartidaModel modelop=new PartidaModel(5);
+    public Partida nueva() {
+        Partida modelop=new Partida(5);
         return modelop;
     }
 }
