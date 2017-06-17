@@ -1,7 +1,11 @@
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -97,7 +101,7 @@ public class Inicio_v {
 
         volvermenu.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ((DefaultTableModel)tabla_tiradas.getModel()).getDataVector().removeAllElements();
+                ((DefaultTableModel) tabla_tiradas.getModel()).getDataVector().removeAllElements();
                 enviar_comb.setEnabled(true);
                 cardLayout.show(mainPanel, "panel1");
             }
@@ -132,20 +136,26 @@ public class Inicio_v {
         result.setPreferredSize(new Dimension(500, 400));
 
         //TABLA
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         Vector<String> cabesa = new Vector<>();
         cabesa.add("Tirada");
         cabesa.add("Bien");
         cabesa.add("Mal");
         cabesa.add("Ayuda");
         Vector<Vector<String>> contenido = new Vector<>();
-        tabla_tiradas=new JTable(new DefaultTableModel(contenido, cabesa));
+        tabla_tiradas = new JTable(new DefaultTableModel(contenido,cabesa){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        });
         tabla_tiradas.getTableHeader().setReorderingAllowed(false);
         tabla_tiradas.getTableHeader().setResizingAllowed(false);
         tabla_tiradas.getColumnModel().getColumn(0).setPreferredWidth(250);
         tabla_tiradas.getColumnModel().getColumn(3).setPreferredWidth(250);
         JScrollPane tabla_t = new JScrollPane(tabla_tiradas);
         tabla_t.setBackground(Color.WHITE);
-
         //ENVIAR TIRADA
         enviar_comb.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -157,12 +167,12 @@ public class Inicio_v {
                 combinacion = combinacion + comboBox4.getSelectedItem();
                 combinacion = combinacion + comboBox5.getSelectedItem();
                 combo = Integer.parseInt(combinacion);
-                DefaultTableModel defaultTableModel = (DefaultTableModel) tabla_tiradas.getModel();
-                defaultTableModel.addRow((new TiradaController(partida)).nuevaTirada(combo, mb_ayuda.getState()));
+                Vector<String> tirada= new TiradaController(partida).nuevaTirada(combo, mb_ayuda.getState());
+
+                ((DefaultTableModel) tabla_tiradas.getModel()).addRow(tirada);
                 if (partida.getAcabado()) {
                     enviar_comb.setEnabled(false);
                 }
-                System.out.println(partida);
             }
         });
 
@@ -171,19 +181,64 @@ public class Inicio_v {
 
 
         //--------------------------------------------------PANEL 3----------------------------------------------
-        //headers for the table
-        String[] columns = new String[]{
-                "Id", "Name", "Hourly Rate", "Acabado"
-        };
+        Vector<String> columns = new Vector<>();
+        columns.add("Id");
+        columns.add("Fecha");
+        columns.add("Finalizada");
 
-        //actual data for the table in a 2d array
-        Object[][] data = new Object[][]{
-                {1, "John", 40.0, false},
-                {2, "Rambo", 70.0, false},
-                {3, "Zorro", 60.0, true},
-        };
-        //create table with data
-        JTable table = new JTable(data, columns);
+        Vector<Vector<String>> partidas_cargadas = new Vector<>();
+        Vector<String> asd = new Vector<>();
+        asd.add("1");
+        asd.add("pepe");
+        asd.add("no");
+        partidas_cargadas.add(asd);
+        JTable table = new JTable(new TableModel() {
+            @Override
+            public int getRowCount() {
+                return partidas_cargadas.size();
+            }
+
+            @Override
+            public int getColumnCount() {
+                return columns.size();
+            }
+
+            @Override
+            public String getColumnName(int columnIndex) {
+                return columns.get(columnIndex);
+            }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return String.class;
+            }
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                return partidas_cargadas.get(rowIndex).get(columnIndex);
+            }
+
+            @Override
+            public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+
+            }
+
+            @Override
+            public void addTableModelListener(TableModelListener l) {
+
+            }
+
+            @Override
+            public void removeTableModelListener(TableModelListener l) {
+
+            }
+        });
+        table.setDefaultRenderer(String.class, centerRenderer);
         JScrollPane sc = new JScrollPane(table);
         JPanel botones_p3 = new JPanel();
         botones_p3.add(b_cargar2);
