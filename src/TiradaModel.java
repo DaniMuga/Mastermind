@@ -68,6 +68,8 @@ public class TiradaModel {
         return bienMal[0];
     } //devuelve el número de correctos
 
+    public int getMal(){ return bienMal[1];}  //devuelve el número de encontrados pero mal situados
+
     public byte getMax() {
         return max;
     }

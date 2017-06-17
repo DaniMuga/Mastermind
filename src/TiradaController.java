@@ -16,11 +16,10 @@ public class TiradaController {
 
     public Vector<String> nuevaTirada(int comb, boolean ayuda) {
         TiradaModel modelo = new TiradaModel(rand, 5, comb);
-//        partida.add(new Tirada(,modelo.getT_ayuda(),modelo.getBienMal()));
         Vector<String> tirada = new Vector<>();
         tirada.add(Arrays.toString(modelo.getJugada()));
-        tirada.add(String.valueOf(modelo.getBienMal()[0]));
-        tirada.add(String.valueOf(modelo.getBienMal()[1]));
+        tirada.add(String.valueOf(modelo.getBien()));
+        tirada.add(String.valueOf(modelo.getMal()));
         if (ayuda)
             tirada.add(Arrays.toString(modelo.getT_ayuda()));
         else
