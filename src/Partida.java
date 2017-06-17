@@ -7,7 +7,6 @@ public class Partida {
     private final byte max;
     private byte[] rand;
     private boolean acabado = false;
-    private List<Tirada> l_tiradas = new ArrayList<>();
 
     //CONSTRUCTOR----------
     public Partida(int max) {
@@ -27,11 +26,6 @@ public class Partida {
         }
         return taula;
     }
-
-    public void add(Tirada tirada) {
-        l_tiradas.add(tirada);
-    }
-
     /*public void hacerTirada(){
         Tirada t = new Tirada(rand,max); //crea un objeto tirada al que se le pasan la tabla de randoms y el max de la tabla
         l_tiradas.add(t); //en la lista de tiradas, añade la tirada hecha
@@ -50,9 +44,4 @@ public class Partida {
         return rand;
     }
 
-    //TOSTRNG-----------
-    public String toString() {
-        String imp = "Aleatori: " + Arrays.toString(rand) + "\n\nENTRADA\tBEN_POS\tMAL_POS\tTAULA\n" + l_tiradas;
-        return imp;
-    }
 }
