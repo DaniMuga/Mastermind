@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 /**
  * Created by Dani on 17/06/2017.
  */
@@ -9,15 +7,21 @@ public class TiradaModel {
     private byte[] t_ayuda;
     private byte[] bienMal;
     private int num_tirada = 0;
+    private int partidaId = -1;
 
     //CONSTRUCTOR
-    public TiradaModel(byte[] rand, int max,int combo) {
+    public TiradaModel(byte[] rand, int max, int combo, int partidaId) {
         this.max = (byte) max; //guarda max en un atributo
         jugada = crearTirada(combo); //hace una tirada y la guarda en una tabla
         t_ayuda = comprobarTabla(jugada, rand); //comprueba los que están bien o mal puestos (0/1/2)
         bienMal = contarBienMal(t_ayuda); //cuenta los que están bien y mal
         num_tirada++; //contador de tiradas
+        this.partidaId = partidaId;
+        new DataBase().insertarTirada(this);
+    }
 
+    public int getPartidaId() {
+        return partidaId;
     }
 
     //METODOS----------
@@ -68,7 +72,9 @@ public class TiradaModel {
         return bienMal[0];
     } //devuelve el número de correctos
 
-    public int getMal(){ return bienMal[1];}  //devuelve el número de encontrados pero mal situados
+    public int getMal() {
+        return bienMal[1];
+    }  //devuelve el número de encontrados pero mal situados
 
     public byte getMax() {
         return max;

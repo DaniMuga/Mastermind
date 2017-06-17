@@ -168,7 +168,6 @@ public class Inicio_v {
                 combinacion = combinacion + comboBox5.getSelectedItem();
                 combo = Integer.parseInt(combinacion);
                 Vector<String> tirada= new TiradaController(partida).nuevaTirada(combo, mb_ayuda.getState());
-
                 ((DefaultTableModel) tabla_tiradas.getModel()).addRow(tirada);
                 if (partida.getAcabado()) {
                     enviar_comb.setEnabled(false);
@@ -268,8 +267,7 @@ public class Inicio_v {
             JButton src = (JButton) e.getSource();
 
             if (src.equals(b_iniciar)) {
-                PartidaController controlador = new PartidaController();
-                partida = controlador.nueva();
+                partida = new PartidaController(null).nueva();
                 cardLayout.show(mainPanel, "panel2");
             }
             if (src.equals(b_cargar)) {

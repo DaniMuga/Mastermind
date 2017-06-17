@@ -15,7 +15,7 @@ public class TiradaController {
     }
 
     public Vector<String> nuevaTirada(int comb, boolean ayuda) {
-        TiradaModel modelo = new TiradaModel(rand, 5, comb);
+        TiradaModel modelo = new TiradaModel(rand, 5, comb,partida.getId());
         Vector<String> tirada = new Vector<>();
         tirada.add(Arrays.toString(modelo.getJugada()));
         tirada.add(String.valueOf(modelo.getBien()));

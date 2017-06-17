@@ -1,17 +1,24 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 public class Partida {
     private final byte max;
     private byte[] rand;
     private boolean acabado = false;
+    private int id;
 
     //CONSTRUCTOR----------
-    public Partida(int max) {
+    public Partida(int max, int id) {
         this.max = (byte) max; //guarda el max en un atributo
         rand = crearObjetivo(max, 0, 9);  //Crea una tabla de randoms de 0 a 9 de 5(max) números
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     //MÉTODOS--------------
@@ -26,6 +33,7 @@ public class Partida {
         }
         return taula;
     }
+
     /*public void hacerTirada(){
         Tirada t = new Tirada(rand,max); //crea un objeto tirada al que se le pasan la tabla de randoms y el max de la tabla
         l_tiradas.add(t); //en la lista de tiradas, añade la tirada hecha
