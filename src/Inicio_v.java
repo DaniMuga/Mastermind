@@ -98,6 +98,7 @@ public class Inicio_v {
         volvermenu.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ((DefaultTableModel)tabla_tiradas.getModel()).getDataVector().removeAllElements();
+                enviar_comb.setEnabled(true);
                 cardLayout.show(mainPanel, "panel1");
             }
         });
@@ -143,7 +144,7 @@ public class Inicio_v {
         tabla_tiradas.getColumnModel().getColumn(0).setPreferredWidth(250);
         tabla_tiradas.getColumnModel().getColumn(3).setPreferredWidth(250);
         JScrollPane tabla_t = new JScrollPane(tabla_tiradas);
-
+        tabla_t.setBackground(Color.WHITE);
 
         //ENVIAR TIRADA
         enviar_comb.addActionListener(new ActionListener() {
