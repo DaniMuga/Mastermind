@@ -1,3 +1,5 @@
+import java.util.Date;
+
 /**
  * Created by Dani on 17/06/2017.
  */
@@ -10,7 +12,7 @@ public class PartidaController {
 
     //
     public Partida nueva() {
-        Partida modelop=new Partida(5,-1);
+        Partida modelop=new Partida(5,-1,new Date());
         this.partida=modelop;
         modelop.setId(save());
         return modelop;

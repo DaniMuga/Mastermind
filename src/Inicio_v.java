@@ -280,11 +280,11 @@ public class Inicio_v {
 
             if (src.equals(b_iniciar)) {
                 partida = new PartidaController(null).nueva();
-                ((DefaultTableModel)tabla_partidas.getModel()).addRow(new Vector<String>(Arrays.asList(""+partida.getId(),""+partida.getRand(),String.valueOf(partida.getAcabado()))));
-                tabla_partidas.addNotify();
                 cardLayout.show(mainPanel, "panel2");
             }
             if (src.equals(b_cargar)) {
+                ((DefaultTableModel)tabla_partidas.getModel()).addRow(new Vector<String>(Arrays.asList(""+partida.getId(),new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(partida.getFecha()),String.valueOf(partida.getAcabado()))));
+                tabla_partidas.addNotify();
                 cardLayout.show(mainPanel, "panel3");
             }
             if (src.equals(b_salir)) {

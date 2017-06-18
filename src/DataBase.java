@@ -89,7 +89,7 @@ class DataBase {
     public int insertarPartida(Partida p) {
         int id = -1;
         try {
-            st.executeUpdate("insert into Partidas values(null,'" + arrayToString(p.getRand()) + "',now()," + p.getAcabado() + " )", Statement.RETURN_GENERATED_KEYS);
+            st.executeUpdate("insert into Partidas values(null,'" + arrayToString(p.getRand()) + "','"+new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(p.getFecha())+"'," + p.getAcabado() + " )", Statement.RETURN_GENERATED_KEYS);
             ResultSet rs = st.getGeneratedKeys();
             if (rs.next()) id = rs.getInt(1);
         } catch (SQLException e) {
@@ -119,7 +119,7 @@ class DataBase {
     public void marcarAcabado(Partida p){
         try {
 
-            st.executeUpdate("UPDATE Partida SET finalizada=TRUE WHERE id="+p.getId());
+            st.executeUpdate("UPDATE Partidas SET finalizada=TRUE WHERE id="+p.getId());
 
         } catch (SQLException e) {
             mostraSQLException(e);

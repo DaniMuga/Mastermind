@@ -24,7 +24,10 @@ public class TiradaController {
             tirada.add(Arrays.toString(modelo.getT_ayuda()));
         else
             tirada.add("");
-        if (modelo.getBienMal()[0] == 5) partida.setAcabado(true);
+        if (modelo.getBienMal()[0] == 5){
+            partida.setAcabado(true);
+            new DataBase().marcarAcabado(partida);
+        }
         return tirada;
     }
 }
