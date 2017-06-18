@@ -12,7 +12,7 @@ public class PartidaController {
 
     //
     public Partida nueva() {
-        Partida modelop=new Partida(5,-1,new Date());
+        Partida modelop=new Partida(-1,new Date());
         this.partida=modelop;
         modelop.setId(save());
         return modelop;

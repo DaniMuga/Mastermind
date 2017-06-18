@@ -125,7 +125,22 @@ class DataBase {
             mostraSQLException(e);
         }
     }
-
+    public Partida cargarPartida(int id){
+        int id_p=-1;
+        String rand_p="";
+        boolean  finalizada_p=false;
+        try {
+            ResultSet rs = st.executeQuery("SELECT * FROM Partidas");
+            if(rs.next()){
+               id= rs.getInt("id");
+               rand_p= rs.getString("rand");
+               finalizada_p=rs.getBoolean("finalizada");
+            }
+        }catch (SQLException e) {
+            mostraSQLException(e);
+        }
+        return new Partida(id_p,stringToArray(rand_p),finalizada_p);
+    }
     private String arrayToString(byte[] array) {
         StringBuilder sb = new StringBuilder();
         for (byte b :
@@ -133,5 +148,13 @@ class DataBase {
             sb.append(b);
         }
         return sb.toString();
+    }
+    private byte[] stringToArray(String str){
+        byte[] b =new byte[str.length()];
+        String[] split=str.split("");
+        for (int i = 0; i < str.length(); i++) {
+            b[i]=Byte.parseByte(split[i]);
+        }
+        return b;
     }
 }

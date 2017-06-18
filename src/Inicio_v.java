@@ -252,7 +252,9 @@ public class Inicio_v {
         b_cargar2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(tabla_partidas.getModel().getValueAt(tabla_partidas.getSelectedRow(), 0));
+
+                partida=new DataBase().cargarPartida(Integer.parseInt((String) tabla_partidas.getModel().getValueAt(tabla_partidas.getSelectedRow(), 0)));
+                cardLayout.show(mainPanel, "panel2");
             }
         });
         b_volverMP.addActionListener(new ActionListener() {

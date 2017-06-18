@@ -2,18 +2,23 @@ import java.util.Date;
 import java.util.Random;
 
 public class Partida {
-    private final byte max;
+    private final byte max=5;
     private byte[] rand;
     private boolean acabado = false;
     private int id;
     private Date fecha;
 
     //CONSTRUCTOR----------
-    public Partida(int max, int id, Date fecha) {
-        this.max = (byte) max; //guarda el max en un atributo
+    public Partida( int id, Date fecha) {
+
         rand = crearObjetivo(max, 0, 9);  //Crea una tabla de randoms de 0 a 9 de 5(max) números
         this.id = id;
         this.fecha=fecha;
+    }
+    public Partida  (int id, byte[] rand,boolean acabado ){
+        this.id=id;
+        this.rand=rand;
+        this.acabado=acabado;
     }
 
     public int getId() {
