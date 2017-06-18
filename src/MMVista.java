@@ -256,6 +256,9 @@ public class MMVista {
                 partidaModel = new DataBase().cargarPartida(Integer.parseInt((String) tabla_partidas.getModel().getValueAt(tabla_partidas.getSelectedRow(), 0)),mb_ayuda.getState());
                 ((DefaultTableModel)tabla_tiradas.getModel()).setDataVector(partidaModel.listaTiradasToVector(),cabesa);
                 tabla_tiradas.addNotify();
+                if(partidaModel.getAcabado()){
+                    enviar_comb.setEnabled(false);
+                }
                 cardLayout.show(mainPanel, "panel2");
             }
         });
