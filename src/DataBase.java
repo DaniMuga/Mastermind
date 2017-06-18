@@ -1,8 +1,9 @@
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 
-class DataBase {
+public class DataBase {
     private String url = "jdbc:mysql://localhost:3306/";
     private String user = "root";
     private String pwd = "9462";
@@ -78,18 +79,19 @@ class DataBase {
     public Vector<Vector<String>> cargarPartidas() {
         Vector<Vector<String>> out = new Vector<>();
         try {
-            ResultSet rs=st.executeQuery("SELECT id,fecha,finalizada FROM Partidas");
-            while (rs.next()) out.add(new Vector<>(Arrays.asList(rs.getString(1),rs.getString(2),String.valueOf(rs.getBoolean(3)))));
+            ResultSet rs = st.executeQuery("SELECT id,fecha,finalizada FROM Partidas");
+            while (rs.next())
+                out.add(new Vector<>(Arrays.asList(rs.getString(1), rs.getString(2), String.valueOf(rs.getBoolean(3)))));
         } catch (SQLException e) {
             mostraSQLException(e);
         }
         return out;
     }
 
-    public int insertarPartida(Partida p) {
+    public int insertarPartida(PartidaModel p) {
         int id = -1;
         try {
-            st.executeUpdate("insert into Partidas values(null,'" + arrayToString(p.getRand()) + "','"+new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(p.getFecha())+"'," + p.getAcabado() + " )", Statement.RETURN_GENERATED_KEYS);
+            st.executeUpdate("insert into Partidas values(null,'" + arrayToString(p.getRand()) + "','" + new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(p.getFecha()) + "'," + p.getAcabado() + " )", Statement.RETURN_GENERATED_KEYS);
             ResultSet rs = st.getGeneratedKeys();
             if (rs.next()) id = rs.getInt(1);
         } catch (SQLException e) {
@@ -101,46 +103,59 @@ class DataBase {
     public void insertarTirada(TiradaModel t) {
         try {
 
-            st.executeUpdate("insert into Tiradas values(null," + t.getPartidaId() + ",'" + arrayToString(t.getJugada()) + "'," + t.getBien() + "," + t.getMal() + "," + arrayToString(t.getT_ayuda()) + " )");
+            st.executeUpdate("insert into Tiradas values(null," + t.getPartidaId() + ",'" + arrayToString(t.getJugada()) + "'," + t.getBien() + "," + t.getMal() + ",'" + arrayToString(t.getT_ayuda()) + "' )");
 
         } catch (SQLException e) {
             mostraSQLException(e);
         }
     }
-    public void eliminarPartida(int p){
+
+    public void eliminarPartida(int p) {
         try {
-            st.executeUpdate("DELETE FROM Partidas WHERE id="+p);
-            st.executeUpdate("DELETE FROM Tiradas WHERE id_partida="+p);
+            st.executeUpdate("DELETE FROM Partidas WHERE id=" + p);
+            st.executeUpdate("DELETE FROM Tiradas WHERE id_partida=" + p);
         } catch (SQLException e) {
             mostraSQLException(e);
         }
     }
 
-    public void marcarAcabado(Partida p){
+    public void marcarAcabado(PartidaModel p) {
         try {
 
-            st.executeUpdate("UPDATE Partidas SET finalizada=TRUE WHERE id="+p.getId());
+            st.executeUpdate("UPDATE Partidas SET finalizada=TRUE WHERE id=" + p.getId());
 
         } catch (SQLException e) {
             mostraSQLException(e);
         }
     }
-    public Partida cargarPartida(int id){
-        int id_p=-1;
-        String rand_p="";
-        boolean  finalizada_p=false;
+
+    public PartidaModel cargarPartida(int id, boolean ayuda) {
+        int id_p = -1;
+        String rand_p = "";
+        boolean finalizada_p = false;
+        ArrayList<TiradaModel> tiradas = new ArrayList<>();
         try {
-            ResultSet rs = st.executeQuery("SELECT * FROM Partidas");
-            if(rs.next()){
-               id= rs.getInt("id");
-               rand_p= rs.getString("rand");
-               finalizada_p=rs.getBoolean("finalizada");
+            ResultSet rs = st.executeQuery("SELECT * FROM Partidas WHERE id=" + id);
+            if (rs.next()) {
+                id_p = rs.getInt("id");
+                rand_p = rs.getString("rand");
+                finalizada_p = rs.getBoolean("finalizada");
             }
-        }catch (SQLException e) {
+            ResultSet rs_tiradas = st.executeQuery("SELECT * FROM Tiradas WHERE id_partida=" + id);
+            while (rs_tiradas.next()) {
+                tiradas.add(
+                        new TiradaModel(
+                                stringToArray(rs_tiradas.getString("jugada")),
+                                stringToArray(rs_tiradas.getString("ayuda")),
+                                new byte[]{rs_tiradas.getByte("bien"), rs_tiradas.getByte("mal")}
+                        ));
+            }
+        } catch (SQLException e) {
             mostraSQLException(e);
         }
-        return new Partida(id_p,stringToArray(rand_p),finalizada_p);
+        return new PartidaModel(id_p, stringToArray(rand_p), finalizada_p,tiradas,ayuda);
     }
+
     private String arrayToString(byte[] array) {
         StringBuilder sb = new StringBuilder();
         for (byte b :
@@ -149,11 +164,12 @@ class DataBase {
         }
         return sb.toString();
     }
-    private byte[] stringToArray(String str){
-        byte[] b =new byte[str.length()];
-        String[] split=str.split("");
+
+    private byte[] stringToArray(String str) {
+        byte[] b = new byte[str.length()];
+        String[] split = str.split("");
         for (int i = 0; i < str.length(); i++) {
-            b[i]=Byte.parseByte(split[i]);
+            b[i] = Byte.parseByte(split[i]);
         }
         return b;
     }

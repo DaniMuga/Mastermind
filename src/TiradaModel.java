@@ -1,3 +1,5 @@
+import java.util.Vector;
+
 /**
  * Created by Dani on 17/06/2017.
  */
@@ -18,6 +20,12 @@ public class TiradaModel {
         num_tirada++; //contador de tiradas
         this.partidaId = partidaId;
         new DataBase().insertarTirada(this);
+    }
+
+    public TiradaModel(byte[] jugada, byte[] t_ayuda, byte[] bienMal) {
+        this.jugada = jugada;
+        this.t_ayuda = t_ayuda;
+        this.bienMal = bienMal;
     }
 
     public int getPartidaId() {

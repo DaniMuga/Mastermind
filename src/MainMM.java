@@ -3,7 +3,6 @@
  */
 public class MainMM {
     public static void main (String args[]) {
-        Inicio_v gui=new Inicio_v();
-
+        MMVista gui=new MMVista();
     }
 }

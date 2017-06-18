@@ -6,16 +6,16 @@ import java.util.Vector;
  */
 public class TiradaController {
     private byte[] rand;
-    private Partida partida;
+    private PartidaModel partidaModel;
 
 
-    public TiradaController(Partida partida) {
-        this.rand = partida.getRand();
-        this.partida = partida;
+    public TiradaController(PartidaModel partidaModel) {
+        this.rand = partidaModel.getRand();
+        this.partidaModel = partidaModel;
     }
 
     public Vector<String> nuevaTirada(int comb, boolean ayuda) {
-        TiradaModel modelo = new TiradaModel(rand, 5, comb,partida.getId());
+        TiradaModel modelo = new TiradaModel(rand, 5, comb, partidaModel.getId());
         Vector<String> tirada = new Vector<>();
         tirada.add(Arrays.toString(modelo.getJugada()));
         tirada.add(String.valueOf(modelo.getBien()));
@@ -25,8 +25,8 @@ public class TiradaController {
         else
             tirada.add("");
         if (modelo.getBienMal()[0] == 5){
-            partida.setAcabado(true);
-            new DataBase().marcarAcabado(partida);
+            partidaModel.setAcabado(true);
+            new DataBase().marcarAcabado(partidaModel);
         }
         return tirada;
     }

@@ -10,9 +10,9 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Vector;
 
-public class Inicio_v {
+public class MMVista {
     //PARTIDA
-    private static Partida partida;
+    private static PartidaModel partidaModel;
     private JFrame frame = new JFrame("MasterMind");
     private JPanel mainPanel = new JPanel();
     private CardLayout cardLayout = new CardLayout();
@@ -47,10 +47,12 @@ public class Inicio_v {
     private JCheckBoxMenuItem mb_ayuda = new JCheckBoxMenuItem("Ayuda");
     private JMenuItem mb_guardarp = new JMenuItem("Guardar Partida");
 
+    private Vector<String> cabesa = new Vector<>();
+
     private JTable tabla_tiradas;
     private JTable tabla_partidas;
 
-    public Inicio_v() {
+    public MMVista() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(980, 660);
         mainPanel.setLayout(cardLayout);
@@ -138,7 +140,6 @@ public class Inicio_v {
         //TABLA
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        Vector<String> cabesa = new Vector<>();
         cabesa.add("Tirada");
         cabesa.add("Bien");
         cabesa.add("Mal");
@@ -167,9 +168,9 @@ public class Inicio_v {
                 combinacion = combinacion + comboBox4.getSelectedItem();
                 combinacion = combinacion + comboBox5.getSelectedItem();
                 combo = Integer.parseInt(combinacion);
-                Vector<String> tirada = new TiradaController(partida).nuevaTirada(combo, mb_ayuda.getState());
+                Vector<String> tirada = new TiradaController(partidaModel).nuevaTirada(combo, mb_ayuda.getState());
                 ((DefaultTableModel) tabla_tiradas.getModel()).addRow(tirada);
-                if (partida.getAcabado()) {
+                if (partidaModel.getAcabado()) {
                     enviar_comb.setEnabled(false);
                 }
             }
@@ -252,8 +253,9 @@ public class Inicio_v {
         b_cargar2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                partida=new DataBase().cargarPartida(Integer.parseInt((String) tabla_partidas.getModel().getValueAt(tabla_partidas.getSelectedRow(), 0)));
+                partidaModel = new DataBase().cargarPartida(Integer.parseInt((String) tabla_partidas.getModel().getValueAt(tabla_partidas.getSelectedRow(), 0)),mb_ayuda.getState());
+                ((DefaultTableModel)tabla_tiradas.getModel()).setDataVector(partidaModel.listaTiradasToVector(),cabesa);
+                tabla_tiradas.addNotify();
                 cardLayout.show(mainPanel, "panel2");
             }
         });
@@ -272,21 +274,20 @@ public class Inicio_v {
         frame.setVisible(true);
     }
 
-    public static void main(String args[]) {
-        new Inicio_v();
-    }
-
     private class cardListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             JButton src = (JButton) e.getSource();
 
             if (src.equals(b_iniciar)) {
-                partida = new PartidaController(null).nueva();
+                partidaModel = new PartidaController(null).nueva();
                 cardLayout.show(mainPanel, "panel2");
             }
             if (src.equals(b_cargar)) {
-                ((DefaultTableModel)tabla_partidas.getModel()).addRow(new Vector<String>(Arrays.asList(""+partida.getId(),new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(partida.getFecha()),String.valueOf(partida.getAcabado()))));
-                tabla_partidas.addNotify();
+                if (partidaModel != null) {
+                    if (partidaModel.getFecha()!=null)
+                    ((DefaultTableModel) tabla_partidas.getModel()).addRow(new Vector<String>(Arrays.asList("" + partidaModel.getId(), new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(partidaModel.getFecha()), String.valueOf(partidaModel.getAcabado()))));
+                    tabla_partidas.addNotify();
+                }
                 cardLayout.show(mainPanel, "panel3");
             }
             if (src.equals(b_salir)) {
