@@ -2,13 +2,12 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.Vector;
 
 public class Inicio_v {
@@ -49,6 +48,7 @@ public class Inicio_v {
     private JMenuItem mb_guardarp = new JMenuItem("Guardar Partida");
 
     private JTable tabla_tiradas;
+    private JTable tabla_partidas;
 
     public Inicio_v() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -144,7 +144,7 @@ public class Inicio_v {
         cabesa.add("Mal");
         cabesa.add("Ayuda");
         Vector<Vector<String>> contenido = new Vector<>();
-        tabla_tiradas = new JTable(new DefaultTableModel(contenido,cabesa){
+        tabla_tiradas = new JTable(new DefaultTableModel(contenido, cabesa) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -167,7 +167,7 @@ public class Inicio_v {
                 combinacion = combinacion + comboBox4.getSelectedItem();
                 combinacion = combinacion + comboBox5.getSelectedItem();
                 combo = Integer.parseInt(combinacion);
-                Vector<String> tirada= new TiradaController(partida).nuevaTirada(combo, mb_ayuda.getState());
+                Vector<String> tirada = new TiradaController(partida).nuevaTirada(combo, mb_ayuda.getState());
                 ((DefaultTableModel) tabla_tiradas.getModel()).addRow(tirada);
                 if (partida.getAcabado()) {
                     enviar_comb.setEnabled(false);
@@ -186,7 +186,7 @@ public class Inicio_v {
         columns.add("Finalizada");
 
         Vector<Vector<String>> partidas_cargadas = new DataBase().cargarPartidas();
-        JTable table = new JTable(new TableModel() {
+        tabla_partidas = new JTable(new DefaultTableModel(partidas_cargadas, columns) {
             @Override
             public int getRowCount() {
                 return partidas_cargadas.size();
@@ -232,24 +232,27 @@ public class Inicio_v {
 
             }
         });
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.getTableHeader().setReorderingAllowed(false);
-        table.getTableHeader().setResizingAllowed(false);
-        table.setDefaultRenderer(String.class, centerRenderer);
-        JScrollPane sc = new JScrollPane(table);
+        tabla_partidas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tabla_partidas.getTableHeader().setReorderingAllowed(false);
+        tabla_partidas.getTableHeader().setResizingAllowed(false);
+        tabla_partidas.setDefaultRenderer(String.class, centerRenderer);
+        JScrollPane sc = new JScrollPane(tabla_partidas);
         JPanel botones_p3 = new JPanel();
         botones_p3.add(b_cargar2);
         botones_p3.add(b_eliminar);
         b_eliminar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(table.getModel().getValueAt(table.getSelectedRow(),0));
+                new DataBase().eliminarPartida(Integer.parseInt((String) tabla_partidas.getModel().getValueAt(tabla_partidas.getSelectedRow(), 0)));
+                ((DefaultTableModel) tabla_partidas.getModel()).removeRow(tabla_partidas.getSelectedRow());
+                ((DefaultTableModel) tabla_partidas.getModel()).fireTableDataChanged();
+                tabla_partidas.addNotify();
             }
         });
         b_cargar2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(table.getModel().getValueAt(table.getSelectedRow(),0));
+                System.out.println(tabla_partidas.getModel().getValueAt(tabla_partidas.getSelectedRow(), 0));
             }
         });
         b_volverMP.addActionListener(new ActionListener() {
@@ -277,6 +280,8 @@ public class Inicio_v {
 
             if (src.equals(b_iniciar)) {
                 partida = new PartidaController(null).nueva();
+                ((DefaultTableModel)tabla_partidas.getModel()).addRow(new Vector<String>(Arrays.asList(""+partida.getId(),""+partida.getRand(),String.valueOf(partida.getAcabado()))));
+                tabla_partidas.addNotify();
                 cardLayout.show(mainPanel, "panel2");
             }
             if (src.equals(b_cargar)) {

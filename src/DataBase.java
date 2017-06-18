@@ -79,7 +79,7 @@ class DataBase {
         Vector<Vector<String>> out = new Vector<>();
         try {
             ResultSet rs=st.executeQuery("SELECT id,fecha,finalizada FROM Partidas");
-            while (rs.next()) out.add(new Vector<>(Arrays.asList(rs.getString(1),rs.getString(2),rs.getString(3))));
+            while (rs.next()) out.add(new Vector<>(Arrays.asList(rs.getString(1),rs.getString(2),String.valueOf(rs.getBoolean(3)))));
         } catch (SQLException e) {
             mostraSQLException(e);
         }
@@ -107,12 +107,10 @@ class DataBase {
             mostraSQLException(e);
         }
     }
-    public void eliminarPartida(Partida p){
+    public void eliminarPartida(int p){
         try {
-
-            st.executeUpdate("DELETE FROM Partidas WHERE id="+p.getId()+
-                                 ";DELETE FROM Tiradas WHERE id_partida="+p.getId());
-
+            st.executeUpdate("DELETE FROM Partidas WHERE id="+p);
+            st.executeUpdate("DELETE FROM Tiradas WHERE id_partida="+p);
         } catch (SQLException e) {
             mostraSQLException(e);
         }
