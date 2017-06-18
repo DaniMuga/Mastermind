@@ -185,12 +185,7 @@ public class Inicio_v {
         columns.add("Fecha");
         columns.add("Finalizada");
 
-        Vector<Vector<String>> partidas_cargadas = new Vector<>();
-        Vector<String> asd = new Vector<>();
-        asd.add("1");
-        asd.add("pepe");
-        asd.add("no");
-        partidas_cargadas.add(asd);
+        Vector<Vector<String>> partidas_cargadas = new DataBase().cargarPartidas();
         JTable table = new JTable(new TableModel() {
             @Override
             public int getRowCount() {
@@ -237,12 +232,26 @@ public class Inicio_v {
 
             }
         });
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.getTableHeader().setReorderingAllowed(false);
+        table.getTableHeader().setResizingAllowed(false);
         table.setDefaultRenderer(String.class, centerRenderer);
         JScrollPane sc = new JScrollPane(table);
         JPanel botones_p3 = new JPanel();
         botones_p3.add(b_cargar2);
         botones_p3.add(b_eliminar);
-
+        b_eliminar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(table.getModel().getValueAt(table.getSelectedRow(),0));
+            }
+        });
+        b_cargar2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(table.getModel().getValueAt(table.getSelectedRow(),0));
+            }
+        });
         b_volverMP.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(mainPanel, "panel1");

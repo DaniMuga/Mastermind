@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.Arrays;
+import java.util.Vector;
 
 class DataBase {
     private String url = "jdbc:mysql://localhost:3306/";
@@ -73,12 +75,23 @@ class DataBase {
         }
     }
 
+    public Vector<Vector<String>> cargarPartidas() {
+        Vector<Vector<String>> out = new Vector<>();
+        try {
+            ResultSet rs=st.executeQuery("SELECT id,fecha,finalizada FROM Partidas");
+            while (rs.next()) out.add(new Vector<>(Arrays.asList(rs.getString(1),rs.getString(2),rs.getString(3))));
+        } catch (SQLException e) {
+            mostraSQLException(e);
+        }
+        return out;
+    }
+
     public int insertarPartida(Partida p) {
         int id = -1;
         try {
-            st.executeUpdate("insert into Partidas values(null,'" + arrayToString(p.getRand()) + "',now()," + p.getAcabado() + " )",Statement.RETURN_GENERATED_KEYS);
-            ResultSet rs= st.getGeneratedKeys();
-            if (rs.next()) id=rs.getInt(1);
+            st.executeUpdate("insert into Partidas values(null,'" + arrayToString(p.getRand()) + "',now()," + p.getAcabado() + " )", Statement.RETURN_GENERATED_KEYS);
+            ResultSet rs = st.getGeneratedKeys();
+            if (rs.next()) id = rs.getInt(1);
         } catch (SQLException e) {
             mostraSQLException(e);
         }
