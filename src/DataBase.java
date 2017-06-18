@@ -107,6 +107,26 @@ class DataBase {
             mostraSQLException(e);
         }
     }
+    public void eliminarPartida(Partida p){
+        try {
+
+            st.executeUpdate("DELETE FROM Partidas WHERE id="+p.getId()+
+                                 ";DELETE FROM Tiradas WHERE id_partida="+p.getId());
+
+        } catch (SQLException e) {
+            mostraSQLException(e);
+        }
+    }
+
+    public void marcarAcabado(Partida p){
+        try {
+
+            st.executeUpdate("UPDATE Partida SET finalizada=TRUE WHERE id="+p.getId());
+
+        } catch (SQLException e) {
+            mostraSQLException(e);
+        }
+    }
 
     private String arrayToString(byte[] array) {
         StringBuilder sb = new StringBuilder();
