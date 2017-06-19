@@ -288,7 +288,7 @@ public class MMVista {
             if (src.equals(b_cargar)) {
                 if (partidaModel != null) {
                     if (partidaModel.getFecha() != null)
-                        if (partidaModel.getId() != Integer.parseInt((String) tabla_partidas.getModel().getValueAt(tabla_partidas.getRowCount() - 1, 0)))
+                        if (tabla_partidas.getRowCount() == 0 || partidaModel.getId() != Integer.parseInt((String) tabla_partidas.getModel().getValueAt(tabla_partidas.getRowCount() - 1, 0)))
                             ((DefaultTableModel) tabla_partidas.getModel()).addRow(new Vector<String>(Arrays.asList("" + partidaModel.getId(), new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(partidaModel.getFecha()), String.valueOf(partidaModel.getAcabado()))));
                     tabla_partidas.addNotify();
                 }
