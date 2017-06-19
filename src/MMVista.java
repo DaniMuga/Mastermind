@@ -253,10 +253,10 @@ public class MMVista {
         b_cargar2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                partidaModel = new DataBase().cargarPartida(Integer.parseInt((String) tabla_partidas.getModel().getValueAt(tabla_partidas.getSelectedRow(), 0)),mb_ayuda.getState());
-                ((DefaultTableModel)tabla_tiradas.getModel()).setDataVector(partidaModel.listaTiradasToVector(),cabesa);
+                partidaModel = new DataBase().cargarPartida(Integer.parseInt((String) tabla_partidas.getModel().getValueAt(tabla_partidas.getSelectedRow(), 0)), mb_ayuda.getState());
+                ((DefaultTableModel) tabla_tiradas.getModel()).setDataVector(partidaModel.listaTiradasToVector(), cabesa);
                 tabla_tiradas.addNotify();
-                if(partidaModel.getAcabado()){
+                if (partidaModel.getAcabado()) {
                     enviar_comb.setEnabled(false);
                 }
                 cardLayout.show(mainPanel, "panel2");
@@ -287,8 +287,9 @@ public class MMVista {
             }
             if (src.equals(b_cargar)) {
                 if (partidaModel != null) {
-                    if (partidaModel.getFecha()!=null)
-                    ((DefaultTableModel) tabla_partidas.getModel()).addRow(new Vector<String>(Arrays.asList("" + partidaModel.getId(), new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(partidaModel.getFecha()), String.valueOf(partidaModel.getAcabado()))));
+                    if (partidaModel.getFecha() != null)
+                        if (partidaModel.getId() != Integer.parseInt((String) tabla_partidas.getModel().getValueAt(tabla_partidas.getRowCount() - 1, 0)))
+                            ((DefaultTableModel) tabla_partidas.getModel()).addRow(new Vector<String>(Arrays.asList("" + partidaModel.getId(), new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(partidaModel.getFecha()), String.valueOf(partidaModel.getAcabado()))));
                     tabla_partidas.addNotify();
                 }
                 cardLayout.show(mainPanel, "panel3");
